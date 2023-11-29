@@ -28,7 +28,7 @@ The goal of this project is implement a simplified version of PicPay. It should 
 
 ### **Payload**
 
-POST `/api/transaction`
+POST `/api/transactions`
 
 ```json
 {
@@ -70,7 +70,7 @@ git clone https://github.com/patricks-js/picpay-challenge
 2. Go to the project directory
 
 ```bash
-cd picpay-challenge
+cd simplified-payment-api
 ```
 
 3. Install dependencies (I'm using `pnpm`)
