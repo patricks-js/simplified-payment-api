@@ -1,0 +1,13 @@
+{
+  "name": "simplified-payment-api",
+  "version": "1.0.0",
+  "description": "A simplified payment API",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "api",
+    "payment"
+  ],
+  "author": "Lucas Patrick <tech.patrick.lsilva@gmail.com>",
+  "license": "MIT"
+}
