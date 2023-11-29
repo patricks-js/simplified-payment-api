@@ -3,7 +3,19 @@
   "version": "1.0.0",
   "description": "A simplified payment API",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "tsup src",
+    "start": "node dist/main/server.js",
+    "start:dev": "tsx watch src/main/server.ts"
+  },
+  "dependencies": {
+    "tsup": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.1",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.2"
+  },
   "keywords": [
     "api",
     "payment"
