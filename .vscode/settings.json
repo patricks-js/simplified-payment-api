@@ -14,5 +14,5 @@
       "source.fixAll.eslint": true
     }
   },
-  "cSpell.words": ["commitlint"]
+  "cSpell.words": ["CNPJ", "commitlint"]
 }
