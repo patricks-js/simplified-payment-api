@@ -16,6 +16,10 @@ export class Email {
     return success(new Email(email))
   }
 
+  get email (): string {
+    return this.#email
+  }
+
   static validator (email: string): boolean {
     const [accountPart, domainPart] = email.split('@')
     const test = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
