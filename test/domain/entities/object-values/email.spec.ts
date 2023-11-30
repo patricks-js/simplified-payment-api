@@ -1,27 +1,31 @@
 import { Email } from '@/domain/entities/object-values/email'
-import { Failure, Success } from '@/utils/either'
+import { InvalidEmailError } from '@/domain/errors/invalid-email-error'
 import { describe, expect, it } from 'vitest'
 
-describe('Email validator', () => {
-  it('should accept a valid email', () => {
-    const email = 'email@example.com'
+describe('Email creation', () => {
+  it('should create email', () => {
+    const validEmail = 'email@example.com'
+    const email = Email.make(validEmail)
 
-    expect(Email.make(email)).toBeInstanceOf(Success)
+    expect(email.isSuccess).toBeTruthy()
+    expect(email.value).toBeInstanceOf(Email)
   })
 
   it('should return an error if email provided is invalid', () => {
     const invalidEmail = '@example.com'
+    const email = Email.make(invalidEmail)
 
-    expect(Email.make(invalidEmail)).toBeInstanceOf(Failure)
+    expect(email.isFailure).toBeTruthy()
+    expect(email.value).toBeInstanceOf(InvalidEmailError)
   })
 
   it('should not accept an email without at symbol (@)', () => {
-    const email = 'emailexample.com'
+    const email = 'invalid_email.com'
 
     expect(Email.validator(email)).toBeFalsy()
   })
 
-  it('should not accept an email with account part length more than 255 chars', () => {
+  it('should not accept an email with account part length more than 64 chars', () => {
     const account = 'a'.repeat(65)
     const email = `${account}@example.com`
 
