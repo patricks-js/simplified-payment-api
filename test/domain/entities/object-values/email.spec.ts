@@ -5,18 +5,18 @@ import { describe, expect, it } from 'vitest'
 describe('Email creation', () => {
   it('should create email', () => {
     const validEmail = 'email@example.com'
-    const email = Email.make(validEmail)
+    const emailOrError = Email.make(validEmail)
 
-    expect(email.isSuccess).toBeTruthy()
-    expect(email.value).toBeInstanceOf(Email)
+    expect(emailOrError.isSuccess).toBeTruthy()
+    expect(emailOrError.value).toBeInstanceOf(Email)
   })
 
   it('should return an error if email provided is invalid', () => {
     const invalidEmail = '@example.com'
-    const email = Email.make(invalidEmail)
+    const emailOrError = Email.make(invalidEmail)
 
-    expect(email.isFailure).toBeTruthy()
-    expect(email.value).toBeInstanceOf(InvalidEmailError)
+    expect(emailOrError.isFailure).toBeTruthy()
+    expect(emailOrError.value).toBeInstanceOf(InvalidEmailError)
   })
 
   it('should not accept an email without at symbol (@)', () => {
