@@ -6,11 +6,7 @@
 
 ## Overview
 
-This is a robust Payment and Transaction API designed to support customer-to-customer (C2C) and customer-to-merchant (C2M) financial operations. It adheres to RESTful principles, ensures security and scalability, and leverages modern development practices such as modular design, containerization, and CI/CD.
-
-The API supports user authentication and authorization, transaction management, and statistical reporting with strict compliance to business rules. It incorporates external services for transaction authorization and notifications, ensuring atomic operations and reliability.
-
----
+A Payment and Transaction API that supports customer-to-customer (C2C) and customer-to-merchant (C2M) financial operations. It adheres to RESTful principles, a modular design, and a scalable architecture.
 
 ## Table of Contents
 
@@ -59,25 +55,26 @@ The API supports user authentication and authorization, transaction management, 
 - Observability with health checks.
 - Logging for all operations.
 - Modularized architecture adhering to SOLID principles.
-- **PostgreSQL** as the main database.
-- **MongoDB** for logging.
-- **Redis** for caching.
-- Scalability and high performance.
+- PostgreSQL as the main database.
+- MongoDB for logging.
+- Redis for caching.
 - CI/CD pipelines for seamless integration and deployment.
+- Passwords stored using bcrypt hashing.
+- HTTPS enforced in production using NGINX.
 
 ## System Requirements
 
-- **Node.js** >= 20
-- **Docker** >= 27
-- **Docker Compose** >= 2.32
+- **Node.js** >= +20
+- **Docker** >= latest
+- **Docker Compose** >= latest
 
 ## How to Run
 
 ### Step 1: Clone the Repository
 
 ```bash
-$ git clone https://github.com/patricks-js/simplified-payment-api.git
-$ cd simplified-payment-api
+git clone https://github.com/patricks-js/simplified-payment-api.git
+cd simplified-payment-api
 ```
 
 ### Step 2: Setup Environment Variables
@@ -85,13 +82,13 @@ $ cd simplified-payment-api
 Copy `.env.example` to `.env` and configure the necessary variables.
 
 ```bash
-$ cp .env.example .env
+cp .env.example .env
 ```
 
 ### Step 3: Build and Run the Docker Containers
 
 ```bash
-$ docker-compose up --build
+docker-compose up --build
 ```
 
 ### Step 4: Access the Application
@@ -101,6 +98,24 @@ The application will be available at `http://localhost:3000`.
 ## API Endpoints
 
 ### 1. Transaction Endpoints
+
+#### Deposit Funds
+
+```http request
+POST /deposit
+Content-Type: application/json
+
+{
+  "amount": "100.00"
+}
+```
+
+Response:
+
+- **201 Created**: Transaction validated and accepted.
+- **422 Unprocessable Entity**: Transaction not processed (e.g., amount ≤ 0).
+- **400 Bad Request**: Validation errors (e.g., invalid payload, missing fields).
+- **500 Internal Server Error**: Unexpected server-side errors.
 
 #### Perform a Transfer
 
@@ -126,11 +141,10 @@ Response:
 
 #### Get Transaction Statistics
 
-**GET /statistics**
+```http request
+GET /statistics
+Content-Type: application/json
 
-Response:
-
-```json
 {
   "count": 10,
   "sum": 1234.56,
@@ -146,7 +160,9 @@ Response:
 
 ### 2. Health Check
 
-**GET /health**
+```http request
+GET /health
+```
 
 - **200 OK**: Application is healthy.
 - **503 Service Unavailable**: Application is experiencing issues.
@@ -163,17 +179,11 @@ The system is designed with a modular and scalable architecture:
   - **MongoDB** for logging operations.
   - **Redis** for caching frequently accessed data and transaction statistics.
 
-## Data Model
+## ER Diagram (Entity-Relationship)
 
-Image...
+The following diagram represents the database structure used in this project:
 
-## Error Handling
-
-- **Validation Errors**: Return `400 Bad Request` with descriptive error messages.
-- **Business Rule Violations**: Return `422 Unprocessable Entity` with specific error codes.
-- **External Service Errors**: Return `503 Service Unavailable` when authorization or notification services fail.
-  - Notifications will be queued for later processing.
-- **Unexpected Errors**: Return `500 Internal Server Error` with correlation IDs for tracking.
+![ER Diagram](.github/assets/er-diagram.png)
 
 ## Observability and Logging
 
@@ -188,13 +198,6 @@ Image...
 - **Dependency Injection**: For flexible and testable components.
 - **SOLID Principles**: Applied throughout to ensure maintainability.
 
-## Performance and Scalability
-
-- **Caching**: Using **Redis** for caching recent transactions and statistics.
-- **Asynchronous Processing**: Queue-based notification handling to manage retries for failed notifications.
-- **Horizontal Scalability**: Designed to scale by adding more instances.
-- **Performance Metrics**: Average response time is under 100ms for key operations.
-
 ## CI/CD
 
 The repository includes a GitHub Actions workflow for:
@@ -202,10 +205,3 @@ The repository includes a GitHub Actions workflow for:
 1. Running tests and static code analysis.
 2. Building and pushing Docker images.
 3. Deploying to staging/production environments.
-
-## Security
-
-- Passwords stored using bcrypt hashing.
-- Input validation to prevent SQL injection and XSS.
-- RBAC for role-based authorization.
-- HTTPS enforced in production.
