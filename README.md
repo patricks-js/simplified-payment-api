@@ -40,7 +40,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   - Possibilidade de empacotar a aplicação via Docker, facilitando a execução.
 
 - **Observabilidade:**  
-  - Inclusão de logs informativos e, se possível, um endpoint de _healthcheck_ para monitoramento da aplicação.
+  - Inclusão de logs informativos e, se possível, um endpoint de *healthcheck* para monitoramento da aplicação.
 
 - **Documentação:**  
   - Uso de ferramentas como Swagger/OpenAPI para documentar a API.
@@ -77,6 +77,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   Registra um novo usuário no sistema.
 
 - **Request Body:**
+
   ```json
   {
     "name": "João da Silva",
@@ -106,6 +107,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   Permite que um usuário adicione dinheiro à sua carteira.
 
 - **Request Body:**
+
   ```json
   {
     "userId": 4,
@@ -132,6 +134,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   Realiza a transferência de dinheiro entre usuários.
 
 - **Request Body:**
+
   ```json
   {
     "amount": 100.0,
@@ -168,6 +171,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   Retorna o saldo atual da carteira do usuário identificado pelo `userId`.
 
 - **Exemplo de Resposta:**
+
   ```json
   {
     "userId": 4,
@@ -195,6 +199,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   - `max`: Maior valor transferido
 
 - **Exemplo de Resposta:**
+
   ```json
   {
     "count": 10,
@@ -222,6 +227,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   Endpoint para verificação do status da aplicação.
 
 - **Exemplo de Resposta:**
+
   ```json
   {
     "status": "UP"
