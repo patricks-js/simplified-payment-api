@@ -1,0 +1,12 @@
+name: simplified-payment-api
+
+services:
+  db:
+    image: bitnami/postgresql:16
+    container_name: payment-api-db
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=payment_api_db
+    ports:
+      - 5432:5432
