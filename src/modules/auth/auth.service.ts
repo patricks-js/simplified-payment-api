@@ -1,13 +1,21 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import bcrypt from "bcryptjs";
 
 import { UserRepository } from "@/db/repositories/user.repository";
+import { JwtService } from "@nestjs/jwt";
 import { SignInDto } from "./dto/sign-in.dto";
 import { SignUpDto } from "./dto/sign-up.dto";
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signUp(signUpDto: SignUpDto) {
     const emailTaken = await this.userRepository.findByEmail(signUpDto.email);
@@ -44,5 +52,31 @@ export class AuthService {
     };
   }
 
-  async signIn(signInDto: SignInDto) {}
+  async signIn(signInDto: SignInDto) {
+    const isUserRegistered = await this.userRepository.findByEmail(
+      signInDto.email,
+    );
+
+    if (!isUserRegistered) {
+      throw new UnauthorizedException("Invalid credentials.");
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      signInDto.password,
+      isUserRegistered.passwordHash,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException("Invalid credentials.");
+    }
+
+    const accessToken = this.jwtService.sign({
+      sub: isUserRegistered.id,
+      type: isUserRegistered.type,
+    });
+
+    return {
+      accessToken,
+    };
+  }
 }
