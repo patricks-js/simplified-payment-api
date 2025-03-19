@@ -9,4 +9,12 @@ export class UserRepository {
   async create(createUserArgs: Prisma.UserCreateArgs) {
     return this.prisma.user.create(createUserArgs);
   }
+
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+  }
 }
