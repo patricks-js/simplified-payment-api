@@ -6,6 +6,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { TransactionsModule } from "./modules/transactions/transactions.module";
 import { WalletsModule } from "./modules/wallets/wallets.module";
 import { TransactionAuthorizerModule } from "./services/transaction-authorizer/transaction-authorizer.module";
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TransactionAuthorizerModule } from "./services/transaction-authorizer/t
     WalletsModule,
     TransactionsModule,
     TransactionAuthorizerModule,
+    UsersModule,
   ],
   providers: [
     {
