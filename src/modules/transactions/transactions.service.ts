@@ -1,6 +1,11 @@
 import { TransactionRepository } from "@/db/repositories/transaction.repository";
+import { UsersService } from "@/modules/users/users.service";
 import { TransactionAuthorizerService } from "@/services/transaction-authorizer/transaction-authorizer.service";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from "@nestjs/common";
 import { WalletsService } from "../wallets/wallets.service";
 import { PerformTransactionDto } from "./dto/perform-transaction.dto";
 
@@ -9,6 +14,7 @@ export class TransactionsService {
   constructor(
     private readonly transactionRepository: TransactionRepository,
     private readonly walletService: WalletsService,
+    private readonly usersService: UsersService,
     private readonly transactionAuthorizerService: TransactionAuthorizerService,
   ) {}
 
@@ -19,7 +25,11 @@ export class TransactionsService {
       throw new BadRequestException("Sender and receiver cannot be the same");
     }
 
-    // TODO: Validate user type. Only users of type 'customer' can perform transactions.
+    const senderUser = await this.usersService.findById(senderId);
+
+    if (senderUser?.type !== "CUSTOMER") {
+      throw new ForbiddenException("Merchant cannot perform transactions");
+    }
 
     const senderWallet = await this.walletService.findByUserId(senderId);
     const senderBalance = await this.walletService.getBalance(senderId);
