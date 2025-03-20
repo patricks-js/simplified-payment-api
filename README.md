@@ -8,15 +8,15 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   - Usuários devem se cadastrar informando Nome Completo, CPF, e-mail e senha.
   - O sistema deve diferenciar dois perfis: *usuário comum* e *lojista*.
 
-- **Movimentação de Carteira:**  
+- **Movimentação de Carteira:**
   - Usuários podem adicionar dinheiro às suas carteiras.
   - Usuários podem visualizar a movimentação de suas carteiras.
 
-- **Transferência de Valores:**  
+- **Transferência de Valores:**
   - Usuários podem transferir dinheiro para outros usuários ou lojistas.
   - O pagador não pode ser um lojista (lojistas só podem receber transferências).
 
-- **Consulta de Estatísticas:**  
+- **Consulta de Estatísticas:**
   - Usuários podem obter estatísticas de transferências recentes (por exemplo, total transferido nos últimos 60 segundos).
 
 - **Integração com Serviços Externos:**
@@ -25,45 +25,45 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 ## Requisitos Não Funcionais
 
-- **Qualidade do Código:**  
+- **Qualidade do Código:**
   - Código limpo, bem organizado e de fácil manutenção.
   - Adoção de princípios SOLID e design patterns quando apropriado.
 
-- **Testes Automatizados:**  
+- **Testes Automatizados:**
   - Implementação de testes unitários e de integração que cubram os principais cenários e exceções.
 
-- **Segurança:**  
+- **Segurança:**
   - Tratamento adequado de erros e validações robustas.
   - Garantir que dados sensíveis (como senhas) sejam armazenados de forma segura.
 
-- **Containerização:**  
+- **Containerização:**
   - Possibilidade de empacotar a aplicação via Docker, facilitando a execução.
 
-- **Observabilidade:**  
+- **Observabilidade:**
   - Inclusão de logs informativos e, se possível, um endpoint de *healthcheck* para monitoramento da aplicação.
 
-- **Documentação:**  
+- **Documentação:**
   - Uso de ferramentas como Swagger/OpenAPI para documentar a API.
 
 ## Regras de Negócio
 
-- **Validação de Dados:**  
+- **Validação de Dados:**
   - Todas as operações de transferência devem incluir dados obrigatórios: valor, identificador do pagador e do recebedor.
   - O valor transferido deve maior que zero.
 
-- **Verificação de Saldo:**  
+- **Verificação de Saldo:**
   - O sistema deve validar se o pagador possui saldo suficiente antes de realizar a transferência.
-  
-- **Perfil de Usuário:**  
+
+- **Perfil de Usuário:**
   - Apenas usuários comuns podem enviar dinheiro; lojistas somente podem receber.
 
-- **Autorização Externa:**  
+- **Autorização Externa:**
   - Antes de confirmar a transferência, o sistema deve consultar um serviço autorizador (via chamada GET para [https://util.devi.tools/api/v2/authorize](https://util.devi.tools/api/v2/authorize)).
 
-- **Transacionalidade:**  
+- **Transacionalidade:**
   - A transferência deve ser tratada como uma operação transacional: se ocorrer qualquer erro (na autorização ou no processamento), a operação deve ser revertida e o saldo do pagador não deve ser debitado.
 
-- **Notificação Pós-Transferência:**  
+- **Notificação Pós-Transferência:**
   - Após a transferência bem-sucedida, o recebedor deve ser notificado por meio de um serviço externo (chamada POST para [https://util.devi.tools/api/v1/notify](https://util.devi.tools/api/v1/notify)).
   - Falhas na notificação não devem comprometer a transferência, mas devem ser registradas em filas para consumo.
 
@@ -73,7 +73,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 #### **POST /users**
 
-- **Descrição:**  
+- **Descrição:**
   Registra um novo usuário no sistema.
 
 - **Request Body:**
@@ -103,7 +103,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 #### **POST /deposit**
 
-- **Descrição:**  
+- **Descrição:**
   Permite que um usuário adicione dinheiro à sua carteira.
 
 - **Request Body:**
@@ -130,7 +130,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 #### **POST /transfer**
 
-- **Descrição:**  
+- **Descrição:**
   Realiza a transferência de dinheiro entre usuários.
 
 - **Request Body:**
@@ -144,16 +144,16 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
   ```
 
 - **Fluxo da Operação:**
-  1. **Validação de Entrada:**  
+  1. **Validação de Entrada:**
      - Verificar se os campos `amount`, `payer` e `payee` estão presentes e o valor é válido (≥ 0).
-  2. **Verificação de Perfil e Saldo:**  
+  2. **Verificação de Perfil e Saldo:**
      - Confirmar que o pagador (payer) é um usuário comum e possui saldo suficiente.
      - Validar que o recebedor (payee) é um usuário válido, podendo ser comum ou lojista.
-  3. **Autorização Externa:**  
+  3. **Autorização Externa:**
      - Realizar a chamada ao serviço autorizador. Se a autorização falhar, cancelar a operação.
-  4. **Operação Transacional:**  
+  4. **Operação Transacional:**
      - Debitar o valor da carteira do pagador e creditar o mesmo na carteira do recebedor. Em caso de erro, reverter a transação.
-  5. **Notificação:**  
+  5. **Notificação:**
      - Enviar notificação ao recebedor usando o serviço de notificação. Falhas na notificação devem ser registradas sem reverter a operação.
 
 - **Respostas:**
@@ -167,7 +167,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 #### **GET /balance/{userId}**
 
-- **Descrição:**  
+- **Descrição:**
   Retorna o saldo atual da carteira do usuário identificado pelo `userId`.
 
 - **Exemplo de Resposta:**
@@ -189,8 +189,8 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 #### **GET /estatistica**
 
-- **Descrição:**  
-  Retorna estatísticas das transferências realizadas nos últimos 60 segundos (ou em uma janela de tempo configurável).  
+- **Descrição:**
+  Retorna estatísticas das transferências realizadas nos últimos 60 segundos (ou em uma janela de tempo configurável).
   As estatísticas incluem:
   - `count`: Número de transferências
   - `sum`: Soma total dos valores transferidos
@@ -223,7 +223,7 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 #### **GET /health**
 
-- **Descrição:**  
+- **Descrição:**
   Endpoint para verificação do status da aplicação.
 
 - **Exemplo de Resposta:**
@@ -239,30 +239,30 @@ Este desafio consiste em desenvolver uma API RESTful que gerencia a movimentaç�
 
 ## Extras e Diferenciais
 
-- **Testes Automatizados e Qualidade do Produto:**  
+- **Testes Automatizados e Qualidade do Produto:**
   - Cobertura abrangente com testes unitários e de integração, avaliando não só os fluxos “felizes”, mas também os caminhos de exceção e validação.
   - Uso de CI/CD para rodar testes e análises estáticas.
 
-- **Logs e Observabilidade:**  
+- **Logs e Observabilidade:**
   - Inclusão de logs detalhados para rastreamento das operações e um endpoint de healthcheck para monitoramento da aplicação.
 
-- **Configuração Dinâmica:**  
+- **Configuração Dinâmica:**
   - Possibilidade de configurar parâmetros importantes, como a janela de tempo para cálculo de estatísticas.
-  
-- **Transacionalidade e Performance:**  
+
+- **Transacionalidade e Performance:**
   - Garantia de operações transacionais nas transferências.
   - Monitoramento e análise do tempo de processamento das operações.
 
-- **Habilidades Básicas e Avançadas de Desenvolvimento Back-end:**  
+- **Habilidades Básicas e Avançadas de Desenvolvimento Back-end:**
   - Domínio sobre a criação de APIs RESTful, organização do código, e uso adequado de versionamento com Git.
-  
-- **Qualidade e Manutenibilidade do Código:**  
+
+- **Qualidade e Manutenibilidade do Código:**
   - Adoção de boas práticas, princípios SOLID, e uso de design patterns.
   - Organização e modularização do código (controller, service, repository, etc.).
 
-- **Conhecimento de Arquitetura e Infraestrutura:**  
+- **Conhecimento de Arquitetura e Infraestrutura:**
   - Aplicação de conceitos como containerização, mensageria e escalabilidade.
   - Proposta e implementação de melhorias na arquitetura.
 
-- **Integração com Serviços Externos:**  
+- **Integração com Serviços Externos:**
   - Implementação de chamadas a serviços externos para autorização e notificação, incluindo o tratamento de falhas desses serviços.
