@@ -1,22 +1,51 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { UserType } from "@prisma/client";
+import { IsEmail, IsEnum, IsString, MinLength } from "class-validator";
 
 export class SignUpDto {
+  @ApiProperty({
+    description: "User's full name",
+    example: "John Doe",
+    type: String,
+    minLength: 3,
+  })
   @IsString()
-  @IsNotEmpty()
+  @MinLength(3)
   name: string;
 
+  @ApiProperty({
+    description: "User's email address",
+    example: "john.doe@example.com",
+    type: String,
+    format: "email",
+  })
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
+  @ApiProperty({
+    description: "User's document number (CPF/CNPJ)",
+    example: "123.456.789-00",
+    type: String,
+  })
   @IsString()
-  @IsNotEmpty()
   document: string;
 
+  @ApiProperty({
+    description: "User's password",
+    example: "mySecurePassword123",
+    type: String,
+    minLength: 8,
+  })
   @IsString()
-  @IsNotEmpty()
+  @MinLength(8)
   password: string;
 
-  @IsEnum(["CUSTOMER", "MERCHANT"])
-  type: "CUSTOMER" | "MERCHANT";
+  @ApiProperty({
+    description: "Type of user account",
+    example: "CUSTOMER",
+    enum: UserType,
+    enumName: "UserType",
+  })
+  @IsEnum(UserType)
+  type: UserType;
 }
