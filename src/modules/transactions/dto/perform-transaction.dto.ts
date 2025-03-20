@@ -3,10 +3,6 @@ import { IsNumber, IsPositive } from "class-validator";
 export class PerformTransactionDto {
   @IsNumber()
   @IsPositive()
-  walletId: number;
-
-  @IsNumber()
-  @IsPositive()
   senderId: number;
 
   @IsNumber()
@@ -19,10 +15,6 @@ export class PerformTransactionDto {
 }
 
 export class PerformTransactionWithoutSenderIdDto {
-  @IsNumber()
-  @IsPositive()
-  walletId: number;
-
   @IsNumber()
   @IsPositive()
   receiverId: number;
